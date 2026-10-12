@@ -9,3 +9,5 @@ project.yml
 Info.plist
 build.log
 out/
+# The starter has no icon picture of its own: each app's is drawn from its icon.json
+template/Assets.xcassets/AppIcon.appiconset/icon.png

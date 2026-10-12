@@ -20,7 +20,7 @@ line saying why it could not be made to pass, and go on to make a new app.
 What exists already, so that today's is a different kind:
 
 ```
-for f in apps/*/app.json; do node -e 'const a=require("./"+process.argv[1]); console.log(a.slug+" | "+a.kind+" | "+a.name)' "$f"; done
+node -e 'const fs=require("fs"); for (const s of fs.existsSync("apps") ? fs.readdirSync("apps") : []) { try { const a=JSON.parse(fs.readFileSync("apps/"+s+"/app.json","utf8")); console.log(a.slug+" | "+a.kind+" | "+a.name); } catch {} }'
 ```
 
 What is earning lately (`ops/RULES.md`, part 1):

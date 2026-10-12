@@ -1,0 +1,11 @@
+{
+  "name": "Larderweek: Meal Planner",
+  "subtitle": "Plan the week, get the list",
+  "promo": "Set breakfast, lunch and dinner for each day of the week from your own dishes, and get one grocery list for all of it. Everything stays on your phone.",
+  "description": "Larderweek plans your week of meals from the dishes you already cook, and turns that plan into one grocery list.\n\nEach day of the week has a breakfast, a lunch and a dinner. Tap one and pick a dish, or type a new one; it is kept for next time. Give a dish its ingredients, one per line, and a note such as where the recipe is. Move between weeks with the arrows, and swipe a meal to clear it.\n\nThe Groceries tab gathers every ingredient the week's dishes need, each once, and says when several meals call for the same thing. Tick items off as they go into the basket, add anything else you need, and start a new shop when you are done.\n\nThere are no recipes to browse and nothing to sign up for: it plans what you cook. Everything you enter is kept on your phone. There is no account, nothing is sent anywhere, and it works with no connection.",
+  "keywords": "menu,dinner,weekly,supper,grocery,shopping list,ingredients,cooking,food,lunch,breakfast,prep,dishes",
+  "category": "Food & Drink",
+  "price": "Free",
+  "reviewNotes": "No account or connection is needed. On the Week tab, tap any meal and type a dish name; add its ingredients on the Dishes tab, and they appear on the Groceries tab.",
+  "captions": ["Breakfast, lunch and dinner for the week", "Pick one of your dishes or add a new one", "One grocery list for the whole week", "Each dish with what goes in it"]
+}

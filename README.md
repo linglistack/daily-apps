@@ -6,7 +6,9 @@ you to upload to the App Store by hand. Nothing in this repository uploads anyth
 ## The apps
 
 <!-- apps:start -->
-No app yet. The first arrives with the next morning's run.
+| Made | App (opens its upload sheet) | What it is | Look first | Suggested price |
+| --- | --- | --- | --- | --- |
+| 2026-10-12 | [Larderweek: Meal Planner](apps/tablewright/UPLOAD.md) | weekly meal planner | [4 screens](apps/tablewright/listing/screenshots) | Free |
 <!-- apps:end -->
 
 Each app's row opens its upload sheet: what to paste into which box, and the three steps to send it.

@@ -49,7 +49,7 @@ for try in $(seq 1 60); do
   sleep 5
 done
 [ "$ready" = yes ] || { echo "error: the simulator's screen stayed black for five minutes"; exit 1; }
-xcrun simctl status_bar "$device" override --time "9:41" --batteryState charged --batteryLevel 100 --cellularBars 4 > /dev/null 2>&1
+xcrun simctl status_bar "$device" override --time "9:41" --batteryState discharging --batteryLevel 100 --cellularBars 4 > /dev/null 2>&1
 xcrun simctl install "$device" "$built" || { echo "error: the app could not be installed in the simulator"; exit 1; }
 
 # Starts the app with the arguments given and says whether it is still running a few seconds later.

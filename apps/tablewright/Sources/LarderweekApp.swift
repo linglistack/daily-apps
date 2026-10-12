@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct TablewrightApp: App {
+struct LarderweekApp: App {
     @StateObject private var store = Store()
 
     var body: some Scene {

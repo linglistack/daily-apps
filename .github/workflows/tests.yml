@@ -1,0 +1,60 @@
+# Runs on every proposed app. First what can be read off its files, on Linux (ops/check.mjs). Then,
+# only if that passed, a Mac builds it, opens it and takes its screenshots (ops/run.sh). Mac time
+# counts ten minutes for each minute against the account's allowance, so nothing else uses it.
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: App checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      slug: ${{ steps.find.outputs.slug }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node --test "ops/*.test.mjs"
+      - name: Which app is it?
+        id: find
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          slug=$(node -e "const m=/^claude\/app-\d{4}-\d{2}-\d{2}-([a-z][a-z0-9-]{2,29})$/.exec(process.env.HEAD_REF||''); console.log(m ? m[1] : '')")
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+      - name: Is everything an upload needs written, and is the name free?
+        if: steps.find.outputs.slug != ''
+        run: node ops/check.mjs "apps/${{ steps.find.outputs.slug }}" --online
+
+  run:
+    name: App runs
+    needs: checks
+    if: needs.checks.outputs.slug != ''
+    runs-on: macos-15
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - run: brew install xcodegen
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
+          HOMEBREW_NO_INSTALL_CLEANUP: 1
+      - name: Build it, open it, take its screenshots
+        run: ops/run.sh "apps/${{ needs.checks.outputs.slug }}" out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kit
+          path: out
+          retention-days: 5
+          if-no-files-found: error

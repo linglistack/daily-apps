@@ -1,0 +1,10 @@
+{
+  "slug": "starter",
+  "target": "Starter",
+  "name": "Starter",
+  "kind": "starter example",
+  "made": "2026-10-12",
+  "why": "The example every new app starts from. Not an app to upload.",
+  "shots": 3,
+  "permissions": {}
+}

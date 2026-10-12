@@ -1,0 +1,74 @@
+# Decides whether a new app a job proposes goes into `main` with no one pressing anything
+# (ops/gate.mjs says what it takes), then adds the icon and screenshots the Mac made and writes the
+# app's upload sheet. This starts when the Tests workflow has finished on a branch named
+# claude/app-…, and runs from `main`, so an app cannot rewrite its own judge. Nothing here uploads
+# to Apple: the owner does that by hand.
+name: Gate
+
+on:
+  workflow_run:
+    workflows: [Tests]
+    types: [completed]
+
+concurrency:
+  group: gate-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  judge:
+    name: May it go in alone?
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      startsWith(github.event.workflow_run.head_branch, 'claude/app-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      checks: read
+      actions: read
+    steps:
+      # `main`, not the proposal: the gate as it stands.
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Judge the app
+        id: judge
+        run: node ops/gate.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          HEAD_REF: ${{ github.event.workflow_run.head_branch }}
+      - name: Fetch the icon and screenshots the Mac made
+        if: steps.judge.outputs.merged != ''
+        uses: actions/download-artifact@v5
+        with:
+          name: kit
+          path: kit
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Add them, and write the upload sheet
+        if: steps.judge.outputs.merged != ''
+        env:
+          SLUG: ${{ steps.judge.outputs.slug }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git pull --ff-only origin main
+          mkdir -p "apps/$SLUG/listing/screenshots"
+          cp kit/screenshots/*.jpg "apps/$SLUG/listing/screenshots/"
+          cp kit/icon.png "apps/$SLUG/Assets.xcassets/AppIcon.appiconset/icon.png"
+          node ops/kit.mjs
+          git add apps README.md
+          git commit -m "Icon, screenshots and upload sheet for $SLUG"
+          for try in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            sleep 5
+          done
+          exit 1

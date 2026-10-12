@@ -1,0 +1,42 @@
+name: Morning numbers
+
+# Saves the day's App Store numbers in numbers/ (ops/watch.mjs): what the daily job chooses an app by.
+on:
+  schedule:
+    - cron: '20 4 * * *'
+    - cron: '20 8 * * *'
+  workflow_dispatch:
+    inputs:
+      again:
+        description: Save today's numbers again even if they are already there
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency: watch
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node ops/watch.mjs ${{ inputs.again && '--again' || '' }}
+      - name: Save the numbers
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add numbers
+          git diff --cached --quiet && exit 0
+          git commit -m "Numbers: $(date -u +%F)"
+          # `main` may have moved while the numbers were being read (the gate merges at any time).
+          for try in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            sleep 5
+          done
+          exit 1

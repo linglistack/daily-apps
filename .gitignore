@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+xcuserdata/
+DerivedData/
+*.xcuserstate
+# Made from each app's app.json by ops/project.mjs and xcodegen
+*.xcodeproj/
+project.yml
+Info.plist
+build.log
+out/

@@ -1,0 +1,11 @@
+{
+  "name": "Starter: A Simple Log",
+  "subtitle": "Write it down, find it later",
+  "promo": "A plain log for anything you want to keep track of. Everything stays on your phone.",
+  "description": "Starter is the example every new app in this collection begins from. It keeps a list of entries, each with a title, an amount and a date, and shows the total at the top.\n\nAdd an entry in two taps. Open one to change it or remove it. Everything is kept on your phone: there is no account, nothing is sent anywhere, and it works with no connection.\n\nThis text is here to show the shape a description takes: what the app does in the first sentence, how it is used in the second paragraph, and what it does not do with your data at the end.",
+  "keywords": "log,tracker,list,journal,count,total,simple,offline",
+  "category": "Productivity",
+  "price": "Free",
+  "reviewNotes": "The app works without an account or a connection. Open it and tap + to add an entry.",
+  "captions": ["Everything you logged, with the total", "Add an entry in two taps", "Open one to change it"]
+}

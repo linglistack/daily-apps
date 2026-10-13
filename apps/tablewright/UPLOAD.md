@@ -7,7 +7,6 @@ Look at the screenshots in `listing/screenshots/` first. They were taken from th
 ## Once, before the first upload of any app
 
 - An Apple Developer membership, and Xcode 26 or later signed in to that account.
-- One public page with a privacy note and a support address, used by every app here. Its address goes into both URL boxes below.
 
 ## 1. Send the build
 
@@ -57,6 +56,14 @@ There are no recipes to browse and nothing to sign up for: it plans what you coo
 menu,dinner,weekly,supper,grocery,shopping list,ingredients,cooking,food,lunch,breakfast,prep,dishes
 ```
 
+**Support URL** and **Privacy Policy URL** (the second is under App Privacy): the same address in both. Leave Marketing URL empty.
+
+```
+https://linglistack.github.io/apps/
+```
+
+**Copyright:** `2026` and then your name or your company's, as on your Apple Developer account.
+
 **Category:** Food & Drink  **Price:** Free  **Age rating:** answer "None" or "No" to every question (4+)
 
 **Screenshots** (iPhone 6.9" display): drag in the 4 files from `listing/screenshots/`.
@@ -66,6 +73,8 @@ menu,dinner,weekly,supper,grocery,shopping list,ingredients,cooking,food,lunch,b
 4. Each dish with what goes in it
 
 **App Privacy:** "Data Not Collected". The app has no account, no network use and no tracking.
+
+**App Review contact:** your own name, phone number and email, so Apple's reviewer can reach you.
 
 **Notes for the reviewer**
 

@@ -7,7 +7,7 @@
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { bundleId } from './project.mjs';
+import { bundleId, factory } from './project.mjs';
 
 const START = '<!-- apps:start -->';
 const END = '<!-- apps:end -->';
@@ -24,7 +24,6 @@ Look at the screenshots in \`listing/screenshots/\` first. They were taken from 
 ## Once, before the first upload of any app
 
 - An Apple Developer membership, and Xcode 26 or later signed in to that account.
-- One public page with a privacy note and a support address, used by every app here. Its address goes into both URL boxes below.
 
 ## 1. Send the build
 
@@ -60,12 +59,20 @@ ${block(listing.description)}
 
 ${block(listing.keywords)}
 
+**Support URL** and **Privacy Policy URL** (the second is under App Privacy): the same address in both. Leave Marketing URL empty.
+
+${block(factory.page)}
+
+**Copyright:** \`${app.made.slice(0, 4)}\` and then your name or your company's, as on your Apple Developer account.
+
 **Category:** ${listing.category}  **Price:** ${listing.price}  **Age rating:** answer "None" or "No" to every question (4+)
 
 **Screenshots** (iPhone 6.9" display): ${shots.length ? `drag in the ${shots.length} files from \`listing/screenshots/\`.` : 'none were made; do not upload this app.'}
 ${listing.captions.map((caption, i) => `${i + 1}. ${caption}`).join('\n')}
 
 **App Privacy:** "Data Not Collected". The app has no account, no network use and no tracking.
+
+**App Review contact:** your own name, phone number and email, so Apple's reviewer can reach you.
 
 **Notes for the reviewer**
 

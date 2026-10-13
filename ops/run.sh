@@ -52,16 +52,30 @@ done
 xcrun simctl status_bar "$device" override --time "9:41" --batteryState discharging --batteryLevel 100 --cellularBars 4 > /dev/null 2>&1
 xcrun simctl install "$device" "$built" || { echo "error: the app could not be installed in the simulator"; exit 1; }
 
-# Starts the app with the arguments given and says whether it is still running a few seconds later.
+# Whether a picture shows a screen with nothing drawn on it: one colour from the status bar down.
+blank() { local flat; flat=$(looks one "$1" | field flat); [ -z "$flat" ] || awk "BEGIN { exit !($flat > 0.9995) }"; }
+
+# Starts the app with the arguments given, waits until it has drawn its screen, and says whether it
+# is still running. A busy Mac shows the app's empty launch screen for many seconds first, and a
+# picture taken then is a white screen: that happened on 12 October 2026, five seconds after launch.
 alive() {
-  local pid
+  local pid try
   pid=$(xcrun simctl launch --terminate-running-process "$device" "$bundle" "$@" 2>/dev/null | awk '{print $NF}')
-  sleep "${WAIT:-5}"
+  sleep 2
+  for try in $(seq 1 45); do
+    xcrun simctl io "$device" screenshot "$work/drawn.png" > /dev/null 2>&1
+    blank "$work/drawn.png" || break
+    sleep 1
+  done
+  # What a screen opens by itself (a sheet, a detail) slides in after the first screen is drawn.
+  sleep "${WAIT:-3}"
   [ -n "$pid" ] && kill -0 "$pid" 2>/dev/null
 }
 
 # As a new user would open it: no sample data, nothing saved yet.
 alive || { echo "error: the app stops when it is first opened, with nothing saved"; exit 1; }
+xcrun simctl io "$device" screenshot "$work/first.png" > /dev/null 2>&1
+if blank "$work/first.png"; then echo "error: the app shows an empty screen when it is first opened, with nothing saved: nothing is drawn on it"; exit 1; fi
 
 for n in $(seq 1 "$shots"); do
   alive -shot "$n" || { echo "error: the app stops when started with -shot $n"; exit 1; }
@@ -70,6 +84,7 @@ for n in $(seq 1 "$shots"); do
   black=$(echo "$seen" | field black); colours=$(echo "$seen" | field colours)
   [ -n "$black" ] || { echo "error: the picture of screen $n could not be read"; exit 1; }
   if awk "BEGIN { exit !($black > 0.97) }"; then echo "error: the screen shown for -shot $n is black"; exit 1; fi
+  if blank "$work/$n.png"; then echo "error: the screen shown for -shot $n is blank: nothing is drawn on it"; exit 1; fi
   if [ "$colours" -lt 14 ]; then echo "error: the screen shown for -shot $n is empty (only $colours colours on it)"; exit 1; fi
   # Each screenshot has to show a different screen from every one before it.
   for ((m = 1; m < n; m++)); do

@@ -82,6 +82,7 @@ struct WeekView: View {
             }
             .navigationTitle("This week")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) { AboutButton() }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Today") { store.goToThisWeek() }
                         .disabled(store.isThisWeek)

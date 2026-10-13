@@ -68,8 +68,11 @@ Then make it the new app. In `apps/<slug>/`:
   words), `made` (today), `why` (part 1), `shots` (3 to 5), `permissions` (only what the code needs,
   each with a plain sentence saying why; most apps need none).
 - **`icon.json`**: one `shape` from the list in `ops/check.mjs`, and two colours that suit the app.
-- **`Sources/`**: the app. Rename `StarterApp.swift` and its struct. Keep `DebugLaunch.swift` and
-  `Storage.swift` as they are. Rewrite the rest.
+- **`Sources/`**: the app. Rename `StarterApp.swift` and its struct. Keep `DebugLaunch.swift`,
+  `Storage.swift` and `About.swift` as they are. Rewrite the rest, and keep `AboutButton()` in the
+  toolbar of the main screen, as `RootView.swift` in the starter has it
+  (`ToolbarItem(placement: .topBarLeading) { AboutButton() }`): it opens the way to the privacy
+  policy and to support, which Apple asks every app to carry. The check refuses an app without it.
 - **`listing/listing.json`**: what the store page says (part 4).
 
 How to write Swift you cannot build (`ops/RULES.md`, part 5):

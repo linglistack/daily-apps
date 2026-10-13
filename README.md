@@ -32,7 +32,10 @@ different kind of thing from every app before it.
 
 - An Apple Developer membership ($99 a year).
 - Xcode 26 or later on the Mac you upload from, signed in to that account.
-- One public page with a privacy note and a support address, shared by every app here.
+- Nothing to do for the privacy policy and support page: it is https://linglistack.github.io/apps/ and
+  every upload sheet gives it. Each app links to it from its About screen. The page is the file
+  `index.html` in the public repository `linglistack/apps`; its address and the email it shows are
+  in `ops/factory.json`.
 - The apps' ids begin with the prefix in `ops/factory.json`. Change it there before the first upload
   if you want another; after an app is uploaded its id cannot change.
 

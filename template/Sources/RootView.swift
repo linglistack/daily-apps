@@ -46,6 +46,7 @@ struct RootView: View {
             }
             .navigationTitle("Starter")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) { AboutButton() }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { adding = true } label: { Image(systemName: "plus") }
                         .accessibilityLabel("Add an entry")

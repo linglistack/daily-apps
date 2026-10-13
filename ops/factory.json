@@ -1,4 +1,6 @@
 {
   "bundlePrefix": "com.linglistack",
-  "minimumOS": "17.0"
+  "minimumOS": "17.0",
+  "page": "https://linglistack.github.io/apps/",
+  "email": "hello@heyreagent.com"
 }

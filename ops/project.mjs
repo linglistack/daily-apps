@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const factory = JSON.parse(readFileSync(path.join(here, 'factory.json'), 'utf8'));
 
+export { factory };
 export const bundleId = (slug) => `${factory.bundlePrefix}.${slug.replace(/-/g, '')}`;
 
 // A value written so YAML reads it back as the same text.
@@ -16,6 +17,8 @@ const quoted = (text) => JSON.stringify(String(text));
 
 export function projectYml(app) {
   const permissions = Object.entries(app.permissions ?? {}).map(([key, why]) => `        ${key}: ${quoted(why)}`);
+  // Where Sources/About.swift sends people: the privacy policy and support page, and the email.
+  const about = [['AboutPage', factory.page], ['AboutEmail', factory.email]].filter(([, value]) => value).map(([key, value]) => `        ${key}: ${quoted(value)}`);
   return `# Made by ops/project.mjs from app.json. Do not edit: change app.json instead.
 name: ${app.target}
 options:
@@ -41,7 +44,7 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         ITSAppUsesNonExemptEncryption: false
-${permissions.join('\n')}${permissions.length ? '\n' : ''}    settings:
+${[...about, ...permissions].map((line) => `${line}\n`).join('')}    settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: ${bundleId(app.slug)}
         TARGETED_DEVICE_FAMILY: "1"

@@ -4,6 +4,7 @@ import { cpSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { check, nameTaken } from './check.mjs';
+import { projectYml } from './project.mjs';
 
 // A copy of the starter app under the name its app.json gives, changed by `edit` before it is checked.
 function app(edit = () => {}) {
@@ -51,6 +52,18 @@ test('an app keeps to the phone: no network, web page, purchase or tracking', ()
     const said = wrong(({ swift }) => swift('Store.swift', (text) => `${text}\n${line}\n`));
     if (why) assert.match(said, why, line); else assert.equal(said, '', line);
   }
+});
+
+test('every app carries the way to the privacy policy and to support, unchanged and on a screen', () => {
+  assert.match(wrong(({ swift }) => swift('About.swift', (text) => text.replace('Privacy and support', 'Legal'))), /About\.swift must be the template's/);
+  assert.match(wrong(({ swift }) => swift('RootView.swift', (text) => text.replace('AboutButton()', 'EmptyView()'))), /No screen shows `AboutButton\(\)`/);
+  // The address and the email are written in at build time from ops/factory.json: one place to change them.
+  const factory = JSON.parse(readFileSync('ops/factory.json', 'utf8'));
+  assert.match(factory.page, /^https:\/\/\S+$/);
+  assert.match(factory.email, /^\S+@\S+\.\S+$/);
+  const yml = projectYml({ slug: 'starter', target: 'Starter', name: 'Starter' });
+  assert.ok(yml.includes(`AboutPage: "${factory.page}"`) && yml.includes(`AboutEmail: "${factory.email}"`));
+  assert.doesNotMatch(readFileSync('template/Sources/About.swift', 'utf8'), /https?:\/\/|@\w+\.\w+/);
 });
 
 test('using the camera or the location without saying why is caught before it can stop the app', () => {

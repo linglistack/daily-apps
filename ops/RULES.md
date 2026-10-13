@@ -27,6 +27,10 @@ app is a different kind of thing from every app made before it, and does one job
 
 - **It keeps to the phone.** No network, no server, no account, no web page, no key. What a person
   enters is saved on the phone and nowhere else.
+- **It carries the way to its privacy policy and to support**, as Apple asks of every app (App Review
+  Guidelines 5.1.1 and 1.5): `Sources/About.swift`, kept exactly as the template has it, and
+  `AboutButton()` in the toolbar of the main screen. That is the one link out of the app; its address
+  is written in when the app is built, so no file of the app holds a web address.
 - **It sells nothing inside itself and tracks nobody.** No purchases, no advertising, no analytics,
   no asking for a rating. The owner sets a price on the store page, or none.
 - **It needs nothing set up.** No capability or entitlement, no extension, no widget, no package.

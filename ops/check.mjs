@@ -47,6 +47,9 @@ const NOT_IN_LISTING = [
 ];
 const LIMITS = { name: 30, subtitle: 30, promo: 170, keywords: 100, description: [300, 4000], home: 14, swiftLines: [150, 2500], files: 30 };
 
+// The About screen every app carries unchanged.
+const ABOUT = path.join(path.dirname(fileURLToPath(import.meta.url)), '../template/Sources/About.swift');
+
 const readJson = (file) => { try { return JSON.parse(readFileSync(file, 'utf8')); } catch { return null; } };
 const isText = (value, most, least = 1) => typeof value === 'string' && value.trim().length >= least && value.length <= most;
 
@@ -120,10 +123,12 @@ export function check(folder, { others = [], today = new Date().toISOString().sl
   let lines = 0;
   let mains = 0;
   let code = '';
+  let about = false;
   for (const file of swift) {
     const text = readFileSync(path.join(sources, file), 'utf8');
     lines += text.split('\n').length;
     if (/^\s*@main\b/m.test(text)) mains += 1;
+    if (file !== 'About.swift' && /\bAboutButton\(\)/.test(text)) about = true;
     code += `\n${text}`;
     const body = text.split('\n').filter((line) => !/^\s*(\/\/|\*|\/\*)/.test(line)).join('\n');
     for (const [pattern, what] of NOT_IN_CODE) {
@@ -133,6 +138,10 @@ export function check(folder, { others = [], today = new Date().toISOString().sl
   }
   if (swift.length) {
     if (mains !== 1) say(`Exactly one Swift file starts the app with @main (found ${mains}).`);
+    // Apple asks every app to carry the way to its privacy policy and to support (App Review Guidelines 5.1.1 and 1.5).
+    const ours = path.join(sources, 'About.swift');
+    if (!existsSync(ours) || readFileSync(ours, 'utf8') !== readFileSync(ABOUT, 'utf8')) say('Sources/About.swift must be the template\'s, unchanged (copy template/Sources/About.swift): it is the way to the privacy policy and to support.');
+    if (!about) say('No screen shows `AboutButton()`: put it in the toolbar of the main screen, so the privacy policy and support can be reached from inside the app.');
     // Each screenshot after the first has to open something: a screen compares the number, or switches on it.
     const numbers = new Set([...code.matchAll(/DebugLaunch\.shot\s*==\s*(\d)/g)].map((found) => found[1]));
     if (!/switch\s+DebugLaunch\.shot/.test(code) && numbers.size < (app?.shots ?? 3) - 1) say('The screens do not open a different screen for each `-shot` number (compare `DebugLaunch.shot == 2`, `== 3`, … where each screen is opened), so the screenshots would repeat.');

@@ -3,6 +3,25 @@
 A new, different iPhone app each day, made by a scheduled job, checked by a gate, and left here for
 you to upload to the App Store by hand. Nothing in this repository uploads anything to Apple.
 
+## How an app gets to the App Store
+
+**Once, before your first upload**
+
+1. Join the Apple Developer Program ($99 a year): https://developer.apple.com/programs/enroll/
+2. Update this Mac to the newest macOS, then install Xcode from the Mac App Store. The Mac needs free
+   space for both.
+3. Open Xcode once and sign in with the same Apple account (Xcode > Settings > Accounts).
+
+**For each app you want on the store**
+
+1. Pick an app from the list below and look at its screenshots. If a screen looks wrong, skip it.
+2. Click the app's name. That opens its upload sheet. Follow it from top to bottom: it has the one
+   line to paste into Terminal, what to click in Xcode, and every text to paste into Apple's site.
+3. Press "Add for Review" on Apple's site. Apple reviews the app and emails you. Once approved, it
+   is on the App Store.
+
+That is all. These apps need no server, no keys and no account other than Apple's.
+
 ## The apps
 
 <!-- apps:start -->
@@ -28,16 +47,16 @@ them. If a screen looks wrong, skip that app. You never have to upload one.
 to the phone (no network, no account, no purchases inside it, nothing tracked), and each one is a
 different kind of thing from every app before it.
 
-## Before the first upload of any app
+## Good to know
 
-- An Apple Developer membership ($99 a year).
-- Xcode 26 or later on the Mac you upload from, signed in to that account.
-- Nothing to do for the privacy policy and support page: it is https://linglistack.github.io/apps/ and
+- The privacy policy and support page every app uses is https://linglistack.github.io/apps/ and
   every upload sheet gives it. Each app links to it from its About screen. The page is the file
   `index.html` in the public repository `linglistack/apps`; its address and the email it shows are
   in `ops/factory.json`.
 - The apps' ids begin with the prefix in `ops/factory.json`. Change it there before the first upload
   if you want another; after an app is uploaded its id cannot change.
+- Uploading needs Xcode 26 or later. Xcode 26 needs macOS 15.6 or later, and the newest Xcode needs
+  macOS 26.2 or later.
 
 ## On your own Mac
 
